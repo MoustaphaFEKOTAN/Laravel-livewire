@@ -1,0 +1,2 @@
+Exigences : Laravel-V11
+php : >8.2
