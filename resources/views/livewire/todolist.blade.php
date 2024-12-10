@@ -1,23 +1,22 @@
-@extends('layouts.app')
 
-@section('content')
 <div class="p-4">
     <h1 class="text-lg font-bold mb-4">Liste de tâches</h1>
 
     <!-- Ajouter une tâche -->
     <div class="mb-4">
+    <form wire:submit.prevent="addTask" class="mb-4">
         <input 
             type="text" 
             wire:model="newTask" 
             placeholder="Nouvelle tâche"
             class="border rounded p-2 w-full"
         />
-        <button 
-            wire:click="addTask" 
+        <button type="submit"
             class="bg-blue-500 text-white px-4 py-2 rounded mt-2"
         >
             Ajouter
         </button>
+        </form>
     </div>
 
     <!-- Liste des tâches -->
@@ -35,7 +34,8 @@
                         {{ $task->title }}
                     </span>
                 </div>
-                <button 
+                 <!-- Bouton de suppression sans formulaire -->
+                 <button 
                     wire:click="deleteTask({{ $task->id }})"
                     class="bg-red-500 text-white px-2 py-1 rounded"
                 >
@@ -45,4 +45,3 @@
         @endforeach
     </ul>
 </div>
-@endsection
