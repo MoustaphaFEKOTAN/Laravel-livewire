@@ -1,9 +1,8 @@
-
 <div class="p-4">
     <h1 class="text-lg font-bold mb-4">Liste de tâches</h1>
 
-    <!-- Ajouter une tâche -->
-    <form wire:submit.prevent="addTask" class="mb-4">
+    <!-- Formulaire d'ajout de tâche -->
+    <div class="mb-4">
         <input 
             type="text" 
             wire:model="newTask" 
@@ -11,12 +10,12 @@
             class="border rounded p-2 w-full"
         />
         <button 
-            type="submit"
+            wire:click="addTask" 
             class="bg-blue-500 text-white px-4 py-2 rounded mt-2"
         >
             Ajouter
         </button>
-    </form>
+    </div>
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -45,20 +44,20 @@
                         {{ $task->title }}
                     </span>
                 </div>
-                <!-- Bouton de modification -->
-                <button 
-                    wire:click="editTask({{ $task->id }})"
-                    class="bg-yellow-500 text-white px-2 py-1 rounded"
-                >
-                    Modifier
-                </button>
-                <!-- Bouton de suppression -->
-                <button 
-                    wire:click="deleteTask({{ $task->id }})"
-                    class="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                    Supprimer
-                </button>
+                <div>
+                    <button 
+                        wire:click="editTask({{ $task->id }})"
+                        class="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                    >
+                        Modifier
+                    </button>
+                    <button 
+                        wire:click="deleteTask({{ $task->id }})"
+                        class="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                        Supprimer
+                    </button>
+                </div>
             </li>
         @endforeach
     </ul>
@@ -86,5 +85,9 @@
         </button>
     </div>
     @endif
-</div>
 
+    <!-- Pagination -->
+    <div class="mt-4">
+        {{ $tasks->links() }}  <!-- Pagination links -->
+    </div>
+</div>

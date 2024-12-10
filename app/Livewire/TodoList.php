@@ -1,26 +1,23 @@
 <?php
-
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\tasks;
-use Illuminate\Validation\ValidationException;
 
 class TodoList extends Component
 {
+    use WithPagination;
+
     public $newTask = '';
-    public $tasks = [];
-    public $editingTaskId = null;  // Pour suivre l'ID de la tâche en cours de modification
-    public $editingTaskTitle = ''; // Pour le titre de la tâche en cours de modification
+    public $editingTaskId = null; // L'ID de la tâche en cours de modification
+    public $editingTaskTitle = ''; // Le titre de la tâche en cours de modification
 
-    public function mount()
-    {
-        $this->loadTasks();
-    }
-
+    // La méthode pour charger les tâches depuis la base de données
     public function loadTasks()
     {
-        $this->tasks = tasks::orderBy('created_at', 'desc')->get();
+        // Retourner directement la pagination pour l'utiliser dans la vue
+        return tasks::orderBy('created_at', 'desc')->paginate(5);
     }
 
     // Validation pour ajouter une tâche
@@ -31,8 +28,7 @@ class TodoList extends Component
         ]);
 
         tasks::create(['title' => $this->newTask]);
-        $this->newTask = '';
-        $this->loadTasks();
+        $this->newTask = ''; // Réinitialiser le champ après ajout
     }
 
     // Toggle pour marquer une tâche comme complétée ou non
@@ -41,7 +37,6 @@ class TodoList extends Component
         $task = tasks::find($taskId);
         if ($task) {
             $task->update(['completed' => !$task->completed]);
-            $this->loadTasks();
         }
     }
 
@@ -51,7 +46,6 @@ class TodoList extends Component
         $task = tasks::find($taskId);
         if ($task) {
             $task->delete();
-            $this->loadTasks();
         }
     }
 
@@ -61,11 +55,11 @@ class TodoList extends Component
         $task = tasks::find($taskId);
         if ($task) {
             $this->editingTaskId = $taskId;
-            $this->editingTaskTitle = $task->title;  // Mettre le titre actuel dans le champ d'édition
+            $this->editingTaskTitle = $task->title;
         }
     }
 
-    // Sauvegarder le changement de titre
+    // Sauvegarder le changement de titre de la tâche
     public function updateTask()
     {
         $this->validate([
@@ -75,14 +69,16 @@ class TodoList extends Component
         $task = tasks::find($this->editingTaskId);
         if ($task) {
             $task->update(['title' => $this->editingTaskTitle]);
-            $this->editingTaskId = null;  // Réinitialiser l'ID de la tâche en cours de modification
-            $this->editingTaskTitle = '';  // Réinitialiser le titre
-            $this->loadTasks();
+            $this->editingTaskId = null; // Réinitialiser l'ID de la tâche en cours de modification
+            $this->editingTaskTitle = ''; // Réinitialiser le titre
         }
     }
 
     public function render()
     {
-        return view('livewire.todolist');
+        // Utiliser la méthode loadTasks pour récupérer les tâches paginées et les passer à la vue
+        return view('livewire.todolist', [
+            'tasks' => $this->loadTasks(),  // Appel à loadTasks pour obtenir les tâches paginées
+        ]);
     }
 }
