@@ -17,7 +17,19 @@
             Ajouter
         </button>
     </form>
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
     <!-- Liste des tâches -->
     <ul class="list-disc ml-4">
         @foreach($tasks as $task)
