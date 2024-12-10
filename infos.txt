@@ -1,0 +1,9 @@
+Exigences : Laravel-V11
+php : >8.2
+installation de livewire : composer require livewire/livewire
+Inclure les scripts JavaScript le layout Blade (resources/views/layouts/app.blade.php), ajoutez :
+
+@livewireStyles
+@livewireScripts
+
+-Ensuite , Créer un composant Livewire avec la commande suivante: php artisan make:livewire NomDuComposant
