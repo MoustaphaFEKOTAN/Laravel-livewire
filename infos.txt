@@ -1,6 +1,7 @@
 Exigences : Laravel-V11
 php : >8.2
-installation de livewire : composer require livewire/livewire
+- installation de livewire : composer require livewire/livewire
+- php artisan livewire:publish --config
 Inclure les scripts JavaScript le layout Blade (resources/views/layouts/app.blade.php), ajoutez :
 
 @livewireStyles
